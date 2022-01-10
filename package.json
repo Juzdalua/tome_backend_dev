@@ -1,0 +1,30 @@
+{
+  "name": "tome_backend_dev",
+  "version": "1.0.0",
+  "description": "tome backend_api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "nodemon --exec babel-node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Juzdalua/tome_backend_dev.git"
+  },
+  "author": "Juzdalua",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Juzdalua/tome_backend_dev/issues"
+  },
+  "homepage": "https://github.com/Juzdalua/tome_backend_dev#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.7",
+    "@babel/node": "^7.16.7",
+    "@babel/preset-env": "^7.16.7",
+    "dotenv": "^10.0.0",    
+    "nodemon": "^2.0.15"
+  }
+}
