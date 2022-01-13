@@ -1,9 +1,9 @@
 import express from "express";
-import { getJoin } from "./root.controllers";
+import { postJoin } from "./users.controllers";
 
 const router = express.Router();
 
 // router.get("/", getJoin);
-router.route("/").get(getJoin);
+router.route("/").post(postJoin);
 
 export default router;

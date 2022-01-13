@@ -1,7 +1,7 @@
-import rootRouter from "../services/root/root.route"
+import userRouter from "../services/users/users.route"
 
 const init = (app) => {
-    app.use("/api/join", rootRouter);
+    app.use("/api/users/join", userRouter);
 };
 
 export default init;
