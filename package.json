@@ -18,13 +18,14 @@
   },
   "homepage": "https://github.com/Juzdalua/tome_backend_dev#readme",
   "dependencies": {
+    "body-parser": "^1.19.1",
     "express": "^4.17.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
     "@babel/node": "^7.16.7",
     "@babel/preset-env": "^7.16.7",
-    "dotenv": "^10.0.0",    
+    "dotenv": "^10.0.0",
     "nodemon": "^2.0.15"
   }
 }
