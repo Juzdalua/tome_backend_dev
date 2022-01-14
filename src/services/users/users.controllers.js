@@ -1,6 +1,6 @@
 
 export const postJoin = (req, res) => {
-
-    console.log(req.headers)
-    return res.end();
+    
+    console.log(`body: ${JSON.stringify(req.body)}`)
+    return res.json("success");
 };
