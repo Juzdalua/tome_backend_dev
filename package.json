@@ -18,9 +18,12 @@
   },
   "homepage": "https://github.com/Juzdalua/tome_backend_dev#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
     "cors": "^2.8.5",
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "pg": "^8.7.1",
+    "sequelize": "^6.13.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",

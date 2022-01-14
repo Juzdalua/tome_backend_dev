@@ -1,6 +1,29 @@
+import bcrypt from "bcrypt";
+import userServices from "./users.services";
 
-export const postJoin = (req, res) => {
+export const createJoin = async (req, res) => {
+    const {email, password, username} = req.body;
+
+    //bcrypt hash
+    const saltRound = 5;
+    const hash = await bcrypt.hashSync(password, saltRound);
     
-    console.log(`body: ${JSON.stringify(req.body)}`)
+    // const ok = await bcrypt.compareSync(password, hash)
+    // console.log(ok)
+
+    const data = {
+        email, 
+        password: hash, 
+        username
+    };
+    const create = await userServices.createUser(data);
+    console.log(create)
+    
+    
     return res.json("success");
+};
+
+export const validJoin = (req, res) => {
+
+    return res.json("success validation");
 };
