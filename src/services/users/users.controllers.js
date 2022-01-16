@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import userServices from "./users.services";
+import {createUser} from "./users.services";
 
 export const createJoin = async (req, res) => {
     const {email, password, username} = req.body;
@@ -16,10 +16,16 @@ export const createJoin = async (req, res) => {
         password: hash, 
         username
     };
-    const create = await userServices.createUser(data);
-    console.log(create)
+    // console.log(data)
     
-    
+    let create;
+    try {
+        create = await createUser(data);      
+    } catch (error) {
+        console.log(`error: ${error}`);
+        return null;
+    }
+
     return res.json("success");
 };
 

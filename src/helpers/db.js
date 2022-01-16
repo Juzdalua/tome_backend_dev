@@ -1,13 +1,13 @@
 import Sequelize from "sequelize";
-import { User } from "./model";
+import User from "../services/users/users.model";
 
 const sequelize = new Sequelize(
-    'postgres',                 //db명
-    process.env.DB_USERNAME,    //username
-    process.env.DB_PASSWORD,    //password
+    process.env.DB_NAME,            //db명
+    process.env.DB_USER,            //username
+    process.env.DB_PASS,            //password
     {
-        host: 'localhost',      //host
-        dialect: 'postgres',    //db종류        
+        host: process.env.DB_HOST,  //host
+        dialect: 'postgres',        //db종류        
     }
 );
 
@@ -28,8 +28,7 @@ db.Sequelize = Sequelize;
 
 //db모듈 가져오기
 db.users = User(sequelize, Sequelize);
-async () => {
-    await db.users.sync();
-};
+
+db.users.sync({force:false, alter:true});
 
 export default db;

@@ -1,11 +1,18 @@
-import Model from "./users.model";
+import db from "../../helpers/db";
+const User = db.users;
 
 export const createUser = async (data) => {
-    const createInfo = await Model.create(
+
+    // const ok =  await User.findAll();
+    // console.log(ok)
+
+    const createInfo = await User.create(
         data, 
-        {raw:true}
+        {
+            raw:true,
+            plain:true
+        }
     );
-    console.log(createInfo)
     if(!!createInfo.dataValues)
         return createInfo.toJSON();
     return false;    
