@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
-import {createUser} from "./users.services";
+const User = require("./users.services");
+const commonResponse = require("../../helpers/commonResponse");
 
 export const createJoin = async (req, res) => {
     const {email, password, username} = req.body;
@@ -20,16 +21,34 @@ export const createJoin = async (req, res) => {
     
     let create;
     try {
-        create = await createUser(data);      
+        create = await User.createUser(data);      
+        return commonResponse.success(res, 200, create)
     } catch (error) {
         console.log(`error: ${error}`);
-        return null;
+        return commonResponse.error(res, 400);
     }
 
-    return res.json("success");
 };
 
-export const validJoin = (req, res) => {
+export const validJoin = async (req, res) => {
+    const {email, username} = req.body;
+    if(username === undefined){
+        //email validation
+        const emailOk = await User.validUser({email: email});
+        
+        if(emailOk) // email available
+            return commonResponse.success(res, 200, emailOk);
+        else
+            return commonResponse.error(res, 400, "Email이 이미 존재합니다.");
 
-    return res.json("success validation");
+    } else if(email === undefined){
+        //username validation
+        const usernameOk = await User.validUser({username: username});
+        
+        if(usernameOk) // username available
+            return commonResponse.success(res, 200, usernameOk);
+        else
+            return commonResponse.error(res, 400, "닉네임이 이미 존재합니다.");
+    }; //if
+
 };

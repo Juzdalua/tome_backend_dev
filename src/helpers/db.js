@@ -29,6 +29,7 @@ db.Sequelize = Sequelize;
 //db모듈 가져오기
 db.users = User(sequelize, Sequelize);
 
+//테이블 생성 및 변경
 db.users.sync({force:false, alter:true});
 
 export default db;
