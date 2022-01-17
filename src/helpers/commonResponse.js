@@ -42,7 +42,7 @@ exports.unAuthentication = ( res, statusCode = 401, data) => {
   return res.status(statusCode).send(resData);
 };
 
-exports.sendUnexpected = async (res, statusCode = 500, error) => {   
+exports.sendUnexpected = async (res, statusCode = 500, error) => { 
   const resData = {
     error: true,
     statusCode: statusCode,
