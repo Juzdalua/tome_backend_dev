@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import {createUserToken} from "../../helpers/jwt";
 const User = require("./users.services");
 const commonResponse = require("../../helpers/commonResponse");
 
@@ -67,6 +68,9 @@ export const loginUser = async(req,res) => {
         if(!passwordOk){
             return commonResponse.error(res, 400, "비밀번호가 다릅니다.");
         } else{
+            const token = createUserToken(user);
+            user.dataValues.token = token.token;            
+                 
             return commonResponse.success(res, 200, user);
         };
     };    

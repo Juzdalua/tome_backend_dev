@@ -40,6 +40,7 @@ export const findUser = async(data) => {
         where: {email: data.email}
     },{
         //options
+        raw: true,
     });
     if(user)
         return user;
