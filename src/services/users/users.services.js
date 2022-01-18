@@ -33,3 +33,16 @@ export const validUser = async (data) => {
     else
         return false;
 };
+
+//find User
+export const findUser = async(data) => {
+    const user = await User.findOne({
+        where: {email: data.email}
+    },{
+        //options
+    });
+    if(user)
+        return user;
+    else
+        return false;
+};

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 const User = require("./users.services");
 const commonResponse = require("../../helpers/commonResponse");
 
+//create User
 export const createJoin = async (req, res) => {
     const {email, password, username} = req.body;
 
@@ -30,6 +31,7 @@ export const createJoin = async (req, res) => {
 
 };
 
+// validation email, username before create User(join)
 export const validJoin = async (req, res) => {
     const {email, username} = req.body;
     if(username === undefined){
@@ -51,4 +53,21 @@ export const validJoin = async (req, res) => {
             return commonResponse.error(res, 400, "닉네임이 이미 존재합니다.");
     }; //if
 
+};
+
+//login User
+export const loginUser = async(req,res) => {
+    const {password} = req.body;
+    
+    const user = await User.findUser(req.body);
+    if(user === false){
+        return commonResponse.error(res, 400, "계정이 존재하지 않습니다.");
+    }else{
+        const passwordOk = await bcrypt.compareSync(password, user.password);
+        if(!passwordOk){
+            return commonResponse.error(res, 400, "비밀번호가 다릅니다.");
+        } else{
+            return commonResponse.success(res, 200, user);
+        };
+    };    
 };
