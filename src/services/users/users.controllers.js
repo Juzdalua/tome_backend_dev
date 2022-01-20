@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 import {createUserToken} from "../../helpers/jwt";
-import User from "./users.services";
+import userService from "./users.services";
 
 import commonResponse from "../../helpers/commonResponse";
 
@@ -24,7 +24,7 @@ const userController = {
                 
         let create;
         try {
-            create = await User.createUser(data);      
+            create = await userService.createUser(data);      
             return commonResponse.success(res, 200, create)
         } catch (error) {
             console.log(`error: ${error}`);
@@ -38,7 +38,7 @@ const userController = {
         const {email, username} = req.body;
         if(username === undefined){
             //email validation
-            const emailOk = await User.validUser({email: email});
+            const emailOk = await userService.validUser({email: email});
             
             if(emailOk) // email available
                 return commonResponse.success(res, 200, emailOk);
@@ -47,7 +47,7 @@ const userController = {
 
         } else if(email === undefined){
             //username validation
-            const usernameOk = await User.validUser({username: username});
+            const usernameOk = await userService.validUser({username: username});
             
             if(usernameOk) // username available
                 return commonResponse.success(res, 200, usernameOk);
@@ -61,7 +61,7 @@ const userController = {
     loginUser: async(req,res) => {
         const {password} = req.body;
         
-        const user = await User.findUser(req.body);
+        const user = await userService.findUser(req.body);
         if(user === false){
             return commonResponse.error(res, 400, "계정이 존재하지 않습니다.");
         }else{
@@ -78,29 +78,84 @@ const userController = {
     },
 
     //social login Kakao
-    loginUserKakao: async(req,res) => {
-        const {code} = req.query;
-        const grant_type = "authorization_code";
-        const redirect_uri = "http://localhost:4001/api/users/login/kakao";
+    // loginUserKakao: async(req,res) => {
+    //     const {code} = req.query;
+    //     const grant_type = "authorization_code";
+    //     const redirect_uri = "http://localhost:4001/api/users/login/kakao";
 
-        const response = await fetch(`https://kauth.kakao.com/oauth/token?grant_type=${grant_type}&client_id=${process.env.CLIENT_ID}&redirect_uri=${redirect_uri}&code=${code}`, {
-            method: "POST",
-            headers: {
-                "Content-type": "application/x-www-form-urlencoded;charset=utf-8"
-            }
-        });
-        const json = await response.json();
-        console.log(json)
+    //     const response = await fetch(`https://kauth.kakao.com/oauth/token?grant_type=${grant_type}&client_id=${process.env.CLIENT_ID}&redirect_uri=${redirect_uri}&code=${code}`, {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-type": "application/x-www-form-urlencoded;charset=utf-8"
+    //         }
+    //     });
+    //     const json = await response.json();
+    //     console.log(json)
 
+    //     const props = await fetch(`https://kapi.kakao.com/v2/user/me`,{
+    //         method: "GET",
+    //         headers: {
+    //             "Authorization": `Bearer ${json.access_token}`,
+    //             "Content-Type": "application/x-www-form-urlencoded",
+    //         },
+    //     });
+    //     const user = await props.json();
+    //     console.log(user)
+        
+    //     const username = user.kakao_account.profile.nickname;
+    //     const email = user.kakao_account.email;
+
+    //     // email valadation
+    //     if(!email){
+    //         fetchResponse = {
+    //             error: true,
+    //             statusCode: 400,
+    //             messageCode: 'BAD REQUEST',
+    //             message: "이메일 동의는 필수입니다."
+    //         };            
+    //     }else{
+    //         const registerUser = await userService.loginKakao(username, email);
+    //         fetchResponse = {
+    //             error: true,
+    //             statusCode: 400,
+    //             messageCode: 'BAD REQUEST',
+    //             message: "이메일 동의는 필수입니다.",
+    //             user: registerUser
+    //         };            
+    //     }// if
+    //     await fetch("", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             payload: fetchResponse                    
+    //         }
+    //     });
+    // },
+    loginUserKakao: async (req, res) => {
+        const {kakao_token} = req.body;
+        
         const props = await fetch(`https://kapi.kakao.com/v2/user/me`,{
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${json.access_token}`,
+                "Authorization": `Bearer ${kakao_token.access_token}`,
                 "Content-Type": "application/x-www-form-urlencoded",
             },
         });
         const user = await props.json();
-        console.log(user)
+                        
+        const username = user.kakao_account.profile.nickname;
+        const email = user.kakao_account.email;
+                
+        //email validation
+        if(!email)
+            return commonResponse.error(res, 400, "Email을 제공해야 가입이 가능합니다.");
+        
+        const registerUser = await userService.loginKakao(username, email);
+        
+        const token = createUserToken(registerUser);        
+        registerUser.dataValues.token = token.token;
+        
+        return commonResponse.success(res, 200, registerUser);        
     },
 };
 

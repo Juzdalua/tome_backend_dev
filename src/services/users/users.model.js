@@ -12,14 +12,20 @@ const User = (sequelize, type) => {
             unique: true,
         },
         password:{
-            type:type.STRING,
-            allowNull: false
+            type:type.STRING            
         },
         username:{
             type:type.STRING,
             allowNull: false,
-            unique: true,
         },
+        is_social:{
+            type:type.BOOLEAN,
+            defaultValue: false
+        },
+        social_type:{
+            type:type.STRING,
+            default:"Web"
+        }
     },{
         timestamps: true,
         paranoid: true,
