@@ -142,20 +142,41 @@ const userController = {
             },
         });
         const user = await props.json();
-                        
+        
         const username = user.kakao_account.profile.nickname;
         const email = user.kakao_account.email;
                 
         //email validation
-        if(!email)
+        if(!email){
+            //disconnect kakao to receive email
+            const disconnect = await fetch(`https://kapi.kakao.com/v1/user/unlink`,{
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${kakao_token.access_token}`,
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            });
             return commonResponse.error(res, 400, "Email을 제공해야 가입이 가능합니다.");
+        }
         
         const registerUser = await userService.loginKakao(username, email);
         
         const token = createUserToken(registerUser);        
         registerUser.dataValues.token = token.token;
+        registerUser.dataValues.kakao_token = kakao_token;
         
         return commonResponse.success(res, 200, registerUser);        
+    },
+
+    //logout Kakao
+    logoutUserKakao : async (req, res) => {
+        const {access_token} = req.body;
+        const response = await fetch('https://kapi.kakao.com/v1/user/logout', {
+            headers: {
+                        "Authorization": `Bearer ${access_token}`,
+                    },
+        });
+        return commonResponse.success(res, response.status, response);
     },
 };
 
