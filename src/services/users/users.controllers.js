@@ -58,13 +58,16 @@ const userController = {
     },
 
     //login User
-    loginUser: async(req,res) => {
-        const {password} = req.body;
-        
+    loginUser: async(req,res) => {                
         const user = await userService.findUser(req.body);
+
         if(user === false){
             return commonResponse.error(res, 400, "계정이 존재하지 않습니다.");
         }else{
+            if(user.is_social)
+                return commonResponse.error(res, 400, "소셜로그인으로 진행해주세요.");
+
+            const {password} = req.body;
             const passwordOk = await bcrypt.compareSync(password, user.password);
             if(!passwordOk){
                 return commonResponse.error(res, 400, "비밀번호가 다릅니다.");

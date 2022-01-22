@@ -1,4 +1,5 @@
 import Sequelize from "sequelize";
+import Memo from "../services/memo/memo.model";
 import User from "../services/users/users.model";
 
 const sequelize = new Sequelize(
@@ -28,8 +29,14 @@ db.Sequelize = Sequelize;
 
 //db모듈 가져오기
 db.users = User(sequelize, Sequelize);
+db.memos = Memo(sequelize, Sequelize);
+
+//관계 설정
+db.users.hasMany(db.memos, {foreignKey: "user_id"});
+db.memos.belongsTo(db.users, {foreignKey: "user_id"});
 
 //테이블 생성 및 변경
 db.users.sync({force:false, alter:true});
+db.memos.sync({force:false, alter:true});
 
 export default db;
