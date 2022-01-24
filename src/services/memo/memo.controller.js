@@ -3,8 +3,10 @@ import memoService from "./memo.services";
 
 const memoController = {
     createMemo: async (req, res) => {
-        const {toDo, user} = req.body;
-                            
+        // const {toDo, user, file} = req.body;
+        console.log(req.body) 
+        console.log(req.file)
+        console.log(req.files)                      
         const memo = await memoService.create(user.id, toDo);
                 
         if(memo)
