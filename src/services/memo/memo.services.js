@@ -20,4 +20,4 @@ const memoService = {
 
 };
 
-export default memoService;;
+export default memoService;
