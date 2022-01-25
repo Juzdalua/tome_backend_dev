@@ -76,7 +76,8 @@ const infoImageUpload = multer({
 
 
 //file upload
-const uploadMiddleware = (req, res, next) => {            
+const uploadMiddleware = (req, res, next) => {     
+    console.log(req.body)       
     var handler = infoImageUpload; 
     handler(req, res, function(err){                
         if(err)
