@@ -85,6 +85,18 @@ const memoController = {
         else
             return commonResponse.error(res, 400, "메모를 삭제하지 못했습니다.");
     },
+
+    //download excel xlsx
+    downloadExcel: async (req, res) => {
+        const {user} = req.body;
+        
+        const memos = await memoService.getAllMemo(user.id); 
+
+        if(user)
+            return commonResponse.success(res, 200, memo);
+        else
+            return commonResponse.error(res, 400, "메모를 삭제하지 못했습니다.");
+    },
 };
 
 export default memoController;
