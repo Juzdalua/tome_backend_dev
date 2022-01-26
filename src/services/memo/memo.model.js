@@ -17,6 +17,10 @@ const Memo = (sequelize, type) => {
         images: {
             type: type.JSONB,            
         },
+        // is_deleted: {
+        //     type:type.BOOLEAN,
+        //     defaultValue: false,
+        // },
     },{
         //oprions
         timestamps: true,

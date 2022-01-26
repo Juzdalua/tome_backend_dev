@@ -47,8 +47,6 @@ const memoController = {
                     quality: 100
                     })
                     .toFile(path.resolve(uploadFolder, 'thumbnails', row.filename));
-                
-                          
             }//for
             req.body.images = validImages;
         };//if
@@ -74,6 +72,18 @@ const memoController = {
             return commonResponse.success(res, 200, memos);
         else
             return commonResponse.error(res, 400, "메모를 불러오지 못했습니다.");
+    },
+
+    //delete memo by id
+    delete: async (req, res) => {
+        const {id} = req.body;
+        const memo = await memoService.deleteMemo(id);
+
+        console.log(memo);
+        if(memo)
+            return commonResponse.success(res, 200, memo);
+        else
+            return commonResponse.error(res, 400, "메모를 삭제하지 못했습니다.");
     },
 };
 

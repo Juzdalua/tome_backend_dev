@@ -21,6 +21,12 @@ const memoService = {
         return memos;        
     },
 
+    deleteMemo: async (id) => {
+        const memo = await Memo.destroy({
+            where: {id}
+        });
+        return memo;
+    },
 };
 
 export default memoService;
