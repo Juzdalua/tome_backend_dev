@@ -4,7 +4,7 @@ import fs from "fs";
 import commonResponse from "./commonResponse";
 
 //make upload folder with date section
-const todaysFolder = (user) => {
+export const todaysFolder = (user) => {
     const date = new Date();
     
     //make today`s folder
@@ -30,9 +30,10 @@ const todaysFolder = (user) => {
         
     const UploadDir = path.join(
         __dirname,
-        `../public/users/${user.email}`,
+        `../../public/users/${user.email}`,
         todaysFolder
     );
+    
     console.log(`##### UploadDir: ${UploadDir}`)
     return {
     UploadDir,
@@ -41,12 +42,15 @@ const todaysFolder = (user) => {
 };
 
 //setting upload path
-const infoUploadDirPath = (user) => todaysFolder(user).UploadDir; 
-console.log(`##### infoUploadDirPath: ${infoUploadDirPath}`)
+function infoUploadDirPath(user) {
+    return todaysFolder(user).UploadDir
+}; 
+
 
 let imageStorage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, infoUploadDirPath(req.body.user));
+        cb(null, infoUploadDirPath(JSON.parse(req.body.user)));
+        console.log(`###`,infoUploadDirPath(JSON.parse(req.body.user)));
     },
     filename: function (req, file, cb) {
         //cb(null, Date.now()+ '_' + file.originalname);
@@ -76,8 +80,7 @@ const infoImageUpload = multer({
 
 
 //file upload
-const uploadMiddleware = (req, res, next) => {     
-    console.log(req.body)       
+const uploadMiddleware = (req, res, next) => {         
     var handler = infoImageUpload; 
     handler(req, res, function(err){                
         if(err)

@@ -14,6 +14,9 @@ const Memo = (sequelize, type) => {
             type: type.STRING,
             allowNull: false,
         },
+        images: {
+            type: type.JSONB,            
+        },
     },{
         //oprions
         timestamps: true,
