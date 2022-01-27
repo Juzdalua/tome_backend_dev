@@ -88,13 +88,13 @@ const memoController = {
 
     //download excel xlsx
     downloadExcel: async (req, res) => {
-        const {user} = req.body;
+        const {user_id} = req.query;
         
-        const memos = await memoService.getAllMemo(user.id); 
+        const memos = await memoService.getAllMemo(user_id); 
         
 
         if(user)
-            return commonResponse.success(res, 200, memo);
+            return commonResponse.success(res, 200, memos);
         else
             return commonResponse.error(res, 400, "메모를 삭제하지 못했습니다.");
     },
