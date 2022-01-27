@@ -91,6 +91,7 @@ const memoController = {
         const {user} = req.body;
         
         const memos = await memoService.getAllMemo(user.id); 
+        
 
         if(user)
             return commonResponse.success(res, 200, memo);
