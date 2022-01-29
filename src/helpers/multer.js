@@ -71,7 +71,7 @@ const infoImageUpload = multer({
     },
     fileFilter: function (req, file, cb) {
         if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) { 
-        // return cb(new Error("resData"));
+        // return commonResponse.error(res, 400, error.message)
         return cb(new Error('JPG,JPEG,PNG 확장자만 업로드 가능합니다.')); 
         }
         return cb(null, true);
