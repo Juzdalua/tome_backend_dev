@@ -4,6 +4,8 @@ import memoService from "./memo.services";
 import fs from "fs";
 import sharp from "sharp";
 import path from "path";
+import exportXlsx from "../../helpers/xlsx";
+import userService from "../users/users.services";
 
 const memoController = {
     createMemo: async (req, res) => {   
@@ -90,10 +92,16 @@ const memoController = {
     downloadExcel: async (req, res) => {
         const {user_id} = req.query;
         
+        const user = await userService.findUserById(user_id);
         const memos = await memoService.getAllMemo(user_id); 
+        console.log(memos)
+        console.log(user)
+
+        let file = await exportXlsx('All_Memos', memos, user);
+        console.log(file)
         
 
-        if(user)
+        if(memos)
             return commonResponse.success(res, 200, memos);
         else
             return commonResponse.error(res, 400, "메모를 삭제하지 못했습니다.");

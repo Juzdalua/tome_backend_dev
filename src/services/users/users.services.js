@@ -49,6 +49,18 @@ const userService = {
             return false;
     },
 
+    findUserById: async(data) => {
+        const user = await User.findOne({
+            where: {id: data}
+        },{
+            row:true,
+        });
+        if(user)
+            return user;
+        else
+            return false;
+    },
+
     //login kakao
     loginKakao : async(username, email) => {
         try {
