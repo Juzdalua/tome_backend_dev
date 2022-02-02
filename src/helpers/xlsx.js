@@ -16,8 +16,8 @@ const exportXlsx = (filename, data, user) => {
     row.getCell(1).value = `${user.username}님의 전체 메모목록`;
 
     row = worksheet.getRow(3);
-    for(let i=1; i<=data.length; i++)
-        row.get(i+2) // 다시하기
+    // for(let i=1; i<=data.length; i++)
+    //     row.get(i+2) // 다시하기
 };
 
 export default exportXlsx;
