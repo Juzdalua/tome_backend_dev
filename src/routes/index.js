@@ -4,6 +4,7 @@ import memoRouter from "../services/memo/memo.route";
 const init = (app) => {
     app.use("/api/users", userRouter);
     app.use("/api/memo", memoRouter);
+    
         
 };
 

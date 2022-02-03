@@ -94,17 +94,19 @@ const memoController = {
         
         const user = await userService.findUserById(user_id);
         const memos = await memoService.getAllMemo(user_id); 
-        console.log(memos)
-        console.log(user)
-
-        let file = await exportXlsx('All_Memos', memos, user);
-        console.log(file)
         
+        
+        let file = await exportXlsx('All_Memos', memos, user);
+        if(file.length > 0){                        
+            let both_path = {};
 
-        if(memos)
-            return commonResponse.success(res, 200, memos);
-        else
-            return commonResponse.error(res, 400, "메모를 삭제하지 못했습니다.");
+            both_path.file = process.env.DOMAIN_URL + '/exports/' + file;
+            both_path.file_path_ = '/exports/' + file;
+
+            return commonResponse.success(res, 200, both_path);
+        } else{
+            return commonResponse.error(res, 400, "메모를 다운 받지 못했습니다.");
+        }// if-else
     },
 };
 

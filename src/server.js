@@ -22,11 +22,12 @@ app.options('*', cors());
 app.use(nocache()); // show headers
 app.use(helmet());
 
-app.use(function (req, res, next) {
+app.use( (req, res, next) => {
+    console.log(`### `, req.method, req.headers);
     var origin = '*'; //Default Origin
     if (req.headers.origin) 
         origin = req.headers.origin;
-    
+    console.log(origin)
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header(
@@ -34,7 +35,7 @@ app.use(function (req, res, next) {
         'Origin, X-Requested-With, Content-Type, Accept, Token, Timestamp, X-Requested-With, Authorization'
     );
     res.header('Access-Control-Allow-Credentials', true);
-
+    
     if ('OPTIONS' == req.method) {
         res.sendStatus(200);
     } else {
