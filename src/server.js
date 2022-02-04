@@ -22,6 +22,25 @@ app.options('*', cors());
 app.use(nocache()); // show headers
 app.use(helmet());
 
+// app.all("*", (req, res, next)=> {
+//     res.setHeader(
+//       "Access-Control-Allow-Headers",
+//       "X-Requested-With,content-type,Authorization ,Accept"
+//     );
+//     res.setHeader("Access-Control-Allow-Origin", "*");
+//     res.setHeader("Access-Control-Allow-Credentials", "true");
+//     res.setHeader("Access-Control-Expose-Headers", "Authorization");
+//     res.setHeader(
+//       "Access-Control-Allow-Methods",
+//       "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+//     );
+//     res.setHeader(
+//       "Access-Control-Allow-Headers",
+//       "X-Requested-With,content-type, Authorization"
+//     );
+//     next();
+//   });
+
 app.use( (req, res, next) => {
     console.log(`### `, req.method, req.headers);
     var origin = '*'; //Default Origin
