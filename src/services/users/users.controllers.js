@@ -8,7 +8,11 @@ import commonResponse from "../../helpers/commonResponse";
 const userController = {
     //create User
     createJoin: async (req, res) => {
-        const {email, password, username} = req.body;
+        const {email, password, password2, username} = req.body;
+
+        if(password !== password2){
+            return commonResponse.error(res, 400, "비밀번호가 다릅니다.");
+        }// if
 
         //bcrypt hash
         const saltRound = 5;
@@ -59,7 +63,10 @@ const userController = {
 
     //login User
     loginUser: async(req,res) => {                
-        const user = await userService.findUser(req.body);
+        const query = {
+            where: {email: req.body.email}
+        };
+        const user = await userService.findUser(query);
 
         if(user === false){
             return commonResponse.error(res, 400, "계정이 존재하지 않습니다.");
@@ -180,6 +187,43 @@ const userController = {
                     },
         });
         return commonResponse.success(res, response.status, response);
+    },
+
+    //user change password
+    changePassword: async (req, res) => {
+        const {user_id, password, password2} = req.body;
+        if(password !== password2){
+            return commonResponse.error(res, 400, "비밀번호가 다릅니다.");
+        }// if
+
+        const query = {where: {id: user_id}}
+        const user = await userService.findUser(query);
+        
+        if(!user)
+            return commonResponse.error(res, 400, "사용자가 존재하지 않습니다.");
+        if(user.is_social)
+            return commonResponse.error(res, 400, "소셜로그인은 비밀번호 설정이 불가능합니다.");
+
+        const samePassword = await bcrypt.compareSync(password, user.password);
+        if(samePassword)
+            return commonResponse.error(res, 400, "같은 비밀번호로는 변경이 불가합니다.");
+
+        //bcrypt hash
+        const saltRound = 5;
+        const hash = await bcrypt.hashSync(password, saltRound);
+
+        const data = {
+            id: user_id,
+            password: hash
+        };
+
+        const response = await userService.changePassword(data);
+        // console.log(response[0], typeof response[0])
+        if(response[0] === 1)
+            return commonResponse.success(res, 200, response[0]);
+        else
+            return commonResponse.error(res, 400, "비밀번호 변경에 실패했습니다..");
+                
     },
 };
 

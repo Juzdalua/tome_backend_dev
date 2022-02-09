@@ -37,9 +37,7 @@ const userService = {
 
     //find User
     findUser : async(data) => {
-        const user = await User.findOne({
-            where: {email: data.email}
-        },{
+        const user = await User.findOne(data,{
             //options
             raw: true,
         });
@@ -85,8 +83,21 @@ const userService = {
         } catch (error) {
             console.log("error", error)
             return error;       
-        }
-         
+        }         
     },
+
+    changePassword : async(data) => {
+        try {
+            const response = await User.update({
+                password: data.password
+            },{
+                where: {id: data.id}
+            });            
+            return response;
+        } catch (error) {
+            return error;
+        }
+    },
+    
 };
 export default userService;
