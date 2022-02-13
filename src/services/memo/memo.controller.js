@@ -1,11 +1,14 @@
-import commonResponse from "../../helpers/commonResponse";
-import { todaysFolder } from "../../helpers/multer";
-import memoService from "./memo.services";
 import fs from "fs";
 import sharp from "sharp";
 import path from "path";
+import moment from "moment";
+import { Op } from "sequelize";
+import commonResponse from "../../helpers/commonResponse";
+import { todaysFolder } from "../../helpers/multer";
+import memoService from "./memo.services";
 import exportXlsx from "../../helpers/xlsx";
 import userService from "../users/users.services";
+
 
 const memoController = {
     createMemo: async (req, res) => {   
@@ -67,8 +70,29 @@ const memoController = {
     },
 
     getMemo: async (req, res) => {
-        const {user_id} = req.body;
-        const memos = await memoService.getAllMemo(user_id);
+        const {user_id, start_date, end_date} = req.body;
+        console.log(moment(start_date).format('YYYY-MM-DD'))
+        
+        let memos;
+        let query;
+        if(!start_date && !end_date)
+            query = {
+                where: {user_id},
+                order: [
+                    ["id", "DESC"],
+                ]
+            };
+        else
+            query = {
+                where: { 
+                    user_id,
+                    createdAt: {
+                        [Op.between] : [moment(start_date), moment(end_date)]
+                    } 
+                 }
+            };
+        memos = await memoService.getAllMemo(query);
+        console.log(memos)
         
         if(memos)
             return commonResponse.success(res, 200, memos);
