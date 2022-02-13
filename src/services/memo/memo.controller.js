@@ -71,28 +71,55 @@ const memoController = {
 
     getMemo: async (req, res) => {
         const {user_id, start_date, end_date} = req.body;
-        console.log(moment(start_date).format('YYYY-MM-DD'))
+        // console.log(user_id, moment(start_date), end_date)        
         
         let memos;
         let query;
-        if(!start_date && !end_date)
+        if(!start_date && !end_date){
             query = {
-                where: {user_id},
+                where: {user_id: user_id},
                 order: [
                     ["id", "DESC"],
                 ]
             };
-        else
+        }else if(start_date && !end_date){
+            query = {
+                where: {
+                    user_id,
+                    createdAt: {
+                        [Op.gte] : [start_date]
+                    }
+                },
+                order:[
+                    ["id", "DESC"],
+                ]
+            }
+        } else if(!start_date && end_date){
+            query = {
+                where: {
+                    user_id,
+                    createdAt: {
+                        [Op.lte] : [end_date]
+                    }
+                },
+                order:[
+                    ["id", "DESC"],
+                ]
+            }
+        }else if(start_date && end_date){
             query = {
                 where: { 
                     user_id,
                     createdAt: {
-                        [Op.between] : [moment(start_date), moment(end_date)]
+                        [Op.between] : [start_date, end_date]
                     } 
-                 }
+                 },
+                 order: [
+                    ["id", "DESC"],
+                ]
             };
-        memos = await memoService.getAllMemo(query);
-        console.log(memos)
+        }// if-else
+        memos = await memoService.getAllMemo(query);        
         
         if(memos)
             return commonResponse.success(res, 200, memos);

@@ -11,13 +11,8 @@ const memoService = {
         return memo;
     },
 
-    getAllMemo: async (user_id) => {        
-        const memos = await Memo.findAll({
-            where: {user_id},
-            order: [
-                ["id", "DESC"],
-            ]
-        });
+    getAllMemo: async (query) => {        
+        const memos = await Memo.findAll(query);
         return memos;        
     },
 
