@@ -65,4 +65,4 @@ app.set("trust proxy", true);
 //router
 init(app);
 
-app.listen(PORT, () => console.log(`🚀 Connect PORT: ${PORT}. ✅`) );
+app.listen(PORT, () => console.log(`🚀 Connect ${process.env.DOMAIN_URL}, PORT: ${PORT}. ✅`) );
