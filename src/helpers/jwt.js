@@ -15,8 +15,10 @@ export const createUserToken = (user) => {
 };
 
 //verify JWT
-export const verifyToken = (req, res) => {
-    
+export const verifyToken = (req, res, next) => {
+    const token = req.headers.authorization.replace("Bearer","").trim();
+    console.log(`token ===> `, token);
+    next();
 };
 
 //is Authorized
