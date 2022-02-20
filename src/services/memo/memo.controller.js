@@ -8,6 +8,7 @@ import { todaysFolder } from "../../helpers/multer";
 import memoService from "./memo.services";
 import exportXlsx from "../../helpers/xlsx";
 import userService from "../users/users.services";
+import { compareSync } from "bcrypt";
 
 
 const memoController = {
@@ -69,10 +70,12 @@ const memoController = {
         };
     },
 
-    getMemo: async (req, res) => {
-        const {user_id, start_date, end_date} = req.body;
-        // console.log(user_id, moment(start_date), end_date)        
-        
+    getMemo: async (req, res) => {        
+        // const {user_id, start_date, end_date} = req.body;
+        let {user_id, start_date, end_date} = req.query;
+        console.log(`query: `,user_id, start_date, end_date) 
+        console.log(typeof start_date) 
+               
         let memos;
         let query;
         if(!start_date && !end_date){
@@ -87,7 +90,7 @@ const memoController = {
                 where: {
                     user_id,
                     createdAt: {
-                        [Op.gte] : [start_date]
+                        [Op.gte] : start_date
                     }
                 },
                 order:[
@@ -99,7 +102,7 @@ const memoController = {
                 where: {
                     user_id,
                     createdAt: {
-                        [Op.lte] : [end_date]
+                        [Op.lte] : end_date
                     }
                 },
                 order:[

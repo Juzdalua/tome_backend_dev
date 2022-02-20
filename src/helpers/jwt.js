@@ -33,7 +33,7 @@ export const verifyJWT = (req, res) => {
 //is Authorized
 export const userAurhorize = (req, res, next) => {
     try {
-        const isVerify = verifyJWT(req.res);
+        const isVerify = verifyJWT(req, res);
         console.log(`isVerify: `,isVerify);
 
         if (isVerify){
