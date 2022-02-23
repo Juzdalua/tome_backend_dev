@@ -73,8 +73,8 @@ const memoController = {
     getMemo: async (req, res) => {        
         // const {user_id, start_date, end_date} = req.body;
         let {user_id, start_date, end_date} = req.query;
-        console.log(`query: `,user_id, start_date, end_date) 
-        console.log(typeof start_date) 
+        // console.log(`query: `,user_id, start_date, end_date) 
+        // console.log(typeof start_date) 
                
         let memos;
         let query;
