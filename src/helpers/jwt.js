@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import commonResponse from "./commonResponse";
+import userServices from "../services/users/users.services";
 
 //create token
 export const createUserToken = (user) => {
@@ -31,14 +32,21 @@ export const verifyJWT = (req, res) => {
 };
 
 //is Authorized
-export const userAurhorize = (req, res, next) => {
+export const userAurhorize = async (req, res, next) => {
     try {
         const isVerify = verifyJWT(req, res);
         console.log(`isVerify: `,isVerify);
 
         if (isVerify){
-
-            next();
+            const query = {
+                where: {email: req.user}
+            };
+            const user = await userServices.findUser(query);
+            // console.log(user)
+            if(user)
+                next();
+            else
+                return commonResponse.unAuthentication(res, {}, '잘못된 사용자입니다.');
         } else 
             return commonResponse.unAuthentication(res, {}, '유효하지 않은 키입니다.');
     } catch (error) {
